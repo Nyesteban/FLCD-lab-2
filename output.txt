@@ -1,0 +1,9 @@
+(10, 0)
+10
+java.lang.Integer
+(20, 0)
+yes
+java.lang.String
+null
+Invalid pos
+null
