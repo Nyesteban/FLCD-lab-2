@@ -30,4 +30,9 @@ public class SymbolTable {
     {
         return symTable.get(element);
     }
+
+    @Override
+    public String toString() {
+        return symTable.toString();
+    }
 }

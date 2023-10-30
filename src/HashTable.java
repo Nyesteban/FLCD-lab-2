@@ -38,11 +38,11 @@ public class HashTable<T> {
     }
 
     public T getByPos(Pair pos) throws Exception {
-        if(this.table.size() <= pos.getFirst() || this.table.size() <= pos.getSecond())
+        if(this.table.size() <= (Integer)pos.getFirst() || this.table.size() <= (Integer)pos.getSecond())
         {
             throw new Exception();
         }
-        return this.table.get(pos.getFirst()).get(pos.getSecond());
+        return this.table.get((Integer)pos.getFirst()).get((Integer)pos.getSecond());
     }
 
     public boolean add(T element)
@@ -53,5 +53,21 @@ public class HashTable<T> {
         var list = this.table.get(hashValue);
         list.add(element);
         return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        for(int i=0; i < this.table.size(); i++)
+        {
+            if(this.table.get(i).size() > 0)
+            {
+                str.append(i);
+                str.append(" ");
+                str.append(this.table.get(i));
+                str.append("\n");
+            }
+        }
+        return str.toString();
     }
 }

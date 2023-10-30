@@ -1,16 +1,16 @@
-public class Pair {
-    private final Integer first;
-    private final Integer second;
+public class Pair<T1,T2> {
+    private final T1 first;
+    private final T2 second;
 
-    public Integer getFirst() {
+    public T1 getFirst() {
         return this.first;
     }
 
-    public Integer getSecond() {
+    public T2 getSecond() {
         return this.second;
     }
 
-    public Pair(Integer first, Integer second) {
+    public Pair(T1 first, T2 second) {
         this.first = first;
         this.second = second;
     }

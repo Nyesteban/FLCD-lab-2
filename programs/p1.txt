@@ -1,0 +1,15 @@
+integer a,b,c;
+input(a);
+input(b);
+input(c);
+integer maximum;
+maximum = a;
+if(b > maximum)
+{
+    maximum = b;
+}
+if(c > maximum)
+{
+    maximum = c;
+}
+output(maximum);
