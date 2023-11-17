@@ -118,11 +118,11 @@ public class ProgramScanner {
                 this.pif.add(new Pair<>(token, new Pair<>(-1, -1)), 3);
             } else if(this.separators.contains(token)){
                 this.pif.add(new Pair<>(token, new Pair<>(-1, -1)), 4);
-            } else if(Pattern.compile("^0|[-|+]*[1-9]([0-9])*|\"[0-9a-zA-Z.' ]*\"$").matcher(token).matches()) {
+            } else if(Pattern.compile("^\"[0-9a-zA-Z.' ]*\"$").matcher(token).matches() || new FiniteAutomaton("fas/FA_intconst.txt").acceptsSequence(token)) {
                 this.symbolTable.add(token);
                 this.pif.add(new Pair<>("CONST", symbolTable.get(token)), 0);
             }
-            else if(Pattern.compile("^([a-zA-Z_][a-zA-Z_0-9]*)").matcher(token).matches()) {
+            else if(new FiniteAutomaton("fas/FA_identifier.txt").acceptsSequence(token)) {
                 this.symbolTable.add(token);
                 this.pif.add(new Pair<>("IDENTIFIER", symbolTable.get(token)), 1);
             } else {
