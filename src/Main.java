@@ -32,7 +32,7 @@ public class Main {
 
     private static void DFAOperations() {
 
-        FiniteAutomaton finiteAutomaton = new FiniteAutomaton("fas/FA.txt");
+        FiniteAutomaton finiteAutomaton = new FiniteAutomaton("fas/FA.in");
 
         System.out.println("FA read from file.");
         printMenu();
