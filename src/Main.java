@@ -1,5 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -99,7 +101,62 @@ public class Main {
         }
     }
 
+    private static void printGrammarMenu() {
+        System.out.println("1. Print non-terminals");
+        System.out.println("2. Print terminals");
+        System.out.println("3. Print starting symbol");
+        System.out.println("4. Print all productions");
+        System.out.println("5. Print all productions for a non terminal");
+        System.out.println("6. Is the grammar a CFG ?");
+        System.out.println("0. Exit");
+    }
+
+    private static void runGrammar() {
+        Grammar grammar = new Grammar("gs/g2.txt");
+        printGrammarMenu();
+        System.out.println("Enter your option: ");
+        Scanner scanner = new Scanner(System.in);
+        int option = scanner.nextInt();
+        while(option != 0) {
+            switch (option) {
+                case 1:
+                    System.out.println("Non-terminals: " + grammar.getNonTerminals());
+                    break;
+                case 2:
+                    System.out.println("Terminals: " + grammar.getTerminals());
+                    break;
+                case 3:
+                    System.out.println("Starting symbol: " + grammar.getStartingSymbol());
+                    break;
+                case 4:
+                    System.out.println("All productions: ");
+                    grammar.getProductions().forEach((lhs, rhs)-> System.out.println(lhs + " -> " + rhs));
+                    break;
+                case 5:
+                    Scanner sc = new Scanner(System.in);
+                    System.out.print("Enter a non-terminal: ");
+                    String nonTerminal= sc.nextLine();
+                    System.out.println("\n\n Productions for the non-terminal: " + nonTerminal);
+                    List<String> key = new ArrayList<>();
+                    key.add(nonTerminal);
+                    try {
+                        grammar.getProductions().get(key).forEach((rhs) -> System.out.println(key + " -> " + rhs));
+                    } catch (NullPointerException e) {
+                        System.out.println("Value is not a defined non-terminal");
+                    }
+                    break;
+                case 6:
+                    System.out.println(grammar.isCFG());
+                    break;
+            }
+            printGrammarMenu();
+            System.out.println("Your option: ");
+            option = scanner.nextInt();
+        }
+    }
+
     public static void main(String[] args) {
+        /*
         System.out.println("1. Scanner");
         System.out.println("2. FA");
         System.out.println("Your option: ");
@@ -115,6 +172,7 @@ public class Main {
             case 2 -> DFAOperations();
             default -> System.out.println("Invalid command!");
         }
-        //DFAOperations();
+        */
+        runGrammar();
     }
 }

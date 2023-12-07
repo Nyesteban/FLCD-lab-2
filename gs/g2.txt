@@ -1,0 +1,20 @@
+program%type%%positive_number%stmt%simpledecl%arrdecl%id_list%assignstmt%expr%int_expr%string_expr%ifstmt%log_expr%forstmt%inputstmt%outputstmt%digits
++%-%*%/%==%<%<=%=%>=%>%&&%||%!%{%}%(%)%[%]%;%space%newline%"%,%integer%string%if%else%input%output%for%array
+program
+program ->stmt ; program$EPSILON
+type ->integer$string
+positive_number ->+ non_zero_digit digits$+ non_zero_digit$non_zero_digit$non_zero_digit digits$0
+digits ->digit$digits
+stmt ->assignstmt$ifstmt$forstmt$inputstmt$outputstmt$simpledecl$arrdecl
+simpledecl ->integer id_list;$string id_list ;
+arrdecl ->array type [positive_number] id_list ;
+id_list ->identifier$identifier , id_list
+assignstmt ->identifier = expr ;
+expr ->int_expr$string_expr$log_expr
+int_expr ->const_int$identifier$int_expr + int_expr$int_expr - int_expr$int_expr * int_expr$int_expr / int_expr$( int_expr )
+string_expr ->const_string$identifier$( string_expr )
+ifstmt ->if ( log_expr ) { program }$if ( log_expr ) { program } else { program }
+log_expr ->identifier$const_int$log_expr == log_expr$log_expr < log_expr$log_expr <= log_expr$log_expr >= log_expr$log_expr > log_expr$log_expr && log_expr$log_expr || log_expr$( log_expr )$! log_expr
+forstmt ->for ( assignsmt ; log_expr ; assignstmt ) { program }
+inputstmt ->input ( identifier ) ;
+outputstmt ->output ( expr ) ;
