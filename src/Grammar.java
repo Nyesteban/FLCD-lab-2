@@ -16,13 +16,13 @@ public class Grammar {
     // LR(0)
     private Set<String> nonTerminals;
     private Set<String> terminals;
-    private Map<List<String>, Set<List<String>>> productions;
+    private Map<String, Set<List<String>>> productions;
     private String startingSymbol;
     private boolean isCFG;
 
     private void processProduction(String production) {
         String[] leftAndRightHandSide = production.split(this.SEPARATOR_LEFT_RIGHT_HAND_SIDE);
-        List<String> splitLHS = List.of(leftAndRightHandSide[0].split(this.TRANSITION_CONCATENATION));
+        String splitLHS = leftAndRightHandSide[0];
         String[] splitRHS = leftAndRightHandSide[1].split(this.SEPARATOR_OR_TRANSITION);
 
         this.productions.putIfAbsent(splitLHS, new HashSet<>());
@@ -54,9 +54,8 @@ public class Grammar {
             return false;
         }
 
-        for (List<String> leftHandSide : this.productions.keySet()) {
-            // On the left hand side we need to have only one element (A -> a, not AB -> a, where A and B are different non-terminals)
-            if (leftHandSide.size() != 1 || !this.nonTerminals.contains(leftHandSide.get(0))) {
+        for (String leftHandSide : this.productions.keySet()) {
+            if (!this.nonTerminals.contains(leftHandSide)) {
                 return false;
             }
 
@@ -84,8 +83,22 @@ public class Grammar {
         return this.terminals;
     }
 
-    public Map<List<String>, Set<List<String>>> getProductions() {
+    public Map<String, Set<List<String>>> getProductions() {
         return this.productions;
+    }
+
+    public Set<List<String>> getProductionsForNonTerminal(String key) {
+        return getProductions().get(key);
+    }
+
+    Map<String, Set<List<String>>> getProductionsContainingNonterminal(String nonterminal) {
+        Map<String, Set<List<String>>> productionsForNonterminal = new HashMap<>();
+        for (var production : productions.entrySet()) {
+            for (List<String> rule : production.getValue())
+                if (rule.contains(nonterminal))
+                    productionsForNonterminal.put(production.getKey(), production.getValue());
+        }
+        return productionsForNonterminal;
     }
 
     public String getStartingSymbol() {

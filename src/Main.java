@@ -1,3 +1,4 @@
+
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -108,11 +109,110 @@ public class Main {
         System.out.println("4. Print all productions");
         System.out.println("5. Print all productions for a non terminal");
         System.out.println("6. Is the grammar a CFG ?");
+        System.out.println("7. Get FIRST and FOLLOW sets");
         System.out.println("0. Exit");
     }
 
+    private static void testGrammar(){
+        Grammar grammar = new Grammar("gs/g3.txt");
+        Parser parser = new Parser(grammar);
+        var FIRST = parser.getFirstSet();
+        var FOLLOW = parser.getFollowSet();
+        if(!FIRST.get("A").contains("+"))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("A").contains("EPSILON"))
+            throw new AssertionError("FIRST fail");
+        if(!(FIRST.get("A").size() == 2))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("B").contains("a"))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("B").contains("("))
+            throw new AssertionError("FIRST fail");
+        if(!(FIRST.get("B").size() == 2))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("S").contains("a"))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("S").contains("("))
+            throw new AssertionError("FIRST fail");
+        if(!(FIRST.get("S").size() == 2))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("C").contains("*"))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("C").contains("EPSILON"))
+            throw new AssertionError("FIRST fail");
+        if(!(FIRST.get("C").size() == 2))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("D").contains("a"))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("D").contains("("))
+            throw new AssertionError("FIRST fail");
+        if(!(FIRST.get("D").size() == 2))
+            throw new AssertionError("FIRST fail");
+        if(!FOLLOW.get("A").contains(")"))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("A").contains("EPSILON"))
+            throw new AssertionError("FOLLOW fail");
+        if(!(FOLLOW.get("A").size() == 2))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("B").contains(")"))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("B").contains("+"))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("B").contains("EPSILON"))
+            throw new AssertionError("FOLLOW fail");
+        if(!(FOLLOW.get("B").size() == 3))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("S").contains(")"))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("S").contains("EPSILON"))
+            throw new AssertionError("FOLLOW fail");
+        if(!(FOLLOW.get("S").size() == 2))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("C").contains(")"))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("C").contains("+"))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("C").contains("EPSILON"))
+            throw new AssertionError("FOLLOW fail");
+        if(!(FOLLOW.get("C").size() == 3))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("D").contains(")"))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("D").contains("*"))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("D").contains("+"))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("D").contains("EPSILON"))
+            throw new AssertionError("FOLLOW fail");
+        if(!(FOLLOW.get("D").size() == 4))
+            throw new AssertionError("FOLLOW fail");
+        grammar = new Grammar("gs/g1.txt");
+        parser = new Parser(grammar);
+        FIRST = parser.getFirstSet();
+        FOLLOW = parser.getFollowSet();
+        if(!FIRST.get("A").contains("a"))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("A").contains("b"))
+            throw new AssertionError("FIRST fail");
+        if(!(FIRST.get("A").size() == 2))
+            throw new AssertionError("FIRST fail");
+        if(!FIRST.get("S").contains("a"))
+            throw new AssertionError("FIRST fail");
+        if(!(FIRST.get("S").size() == 1))
+            throw new AssertionError("FIRST fail");
+        if(!FOLLOW.get("A").contains("EPSILON"))
+            throw new AssertionError("FOLLOW fail");
+        if(!(FOLLOW.get("A").size() == 1))
+            throw new AssertionError("FOLLOW fail");
+        if(!FOLLOW.get("S").contains("EPSILON"))
+            throw new AssertionError("FOLLOW fail");
+        if(!(FOLLOW.get("S").size() == 1))
+            throw new AssertionError("FOLLOW fail");
+    }
+
     private static void runGrammar() {
-        Grammar grammar = new Grammar("gs/g2.txt");
+        Grammar grammar = new Grammar("gs/g3.txt");
+        Parser parser = new Parser(grammar);
         printGrammarMenu();
         System.out.println("Enter your option: ");
         Scanner scanner = new Scanner(System.in);
@@ -148,6 +248,10 @@ public class Main {
                 case 6:
                     System.out.println(grammar.isCFG());
                     break;
+                case 7:
+                    System.out.println(parser.getFirstSet());
+                    System.out.println(parser.getFollowSet());
+                    break;
             }
             printGrammarMenu();
             System.out.println("Your option: ");
@@ -173,6 +277,7 @@ public class Main {
             default -> System.out.println("Invalid command!");
         }
         */
+        testGrammar();
         runGrammar();
     }
 }
