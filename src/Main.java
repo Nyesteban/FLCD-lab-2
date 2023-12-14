@@ -1,9 +1,7 @@
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     private static void printToFile(String filePath, Object object) {
@@ -110,6 +108,8 @@ public class Main {
         System.out.println("5. Print all productions for a non terminal");
         System.out.println("6. Is the grammar a CFG ?");
         System.out.println("7. Get FIRST and FOLLOW sets");
+        System.out.println("8. Create parse table");
+        System.out.println("9. Parse sequence");
         System.out.println("0. Exit");
     }
 
@@ -150,7 +150,7 @@ public class Main {
             throw new AssertionError("FIRST fail");
         if(!FOLLOW.get("A").contains(")"))
             throw new AssertionError("FOLLOW fail");
-        if(!FOLLOW.get("A").contains("EPSILON"))
+        if(!FOLLOW.get("A").contains("$"))
             throw new AssertionError("FOLLOW fail");
         if(!(FOLLOW.get("A").size() == 2))
             throw new AssertionError("FOLLOW fail");
@@ -158,13 +158,13 @@ public class Main {
             throw new AssertionError("FOLLOW fail");
         if(!FOLLOW.get("B").contains("+"))
             throw new AssertionError("FOLLOW fail");
-        if(!FOLLOW.get("B").contains("EPSILON"))
+        if(!FOLLOW.get("B").contains("$"))
             throw new AssertionError("FOLLOW fail");
         if(!(FOLLOW.get("B").size() == 3))
             throw new AssertionError("FOLLOW fail");
         if(!FOLLOW.get("S").contains(")"))
             throw new AssertionError("FOLLOW fail");
-        if(!FOLLOW.get("S").contains("EPSILON"))
+        if(!FOLLOW.get("S").contains("$"))
             throw new AssertionError("FOLLOW fail");
         if(!(FOLLOW.get("S").size() == 2))
             throw new AssertionError("FOLLOW fail");
@@ -172,7 +172,7 @@ public class Main {
             throw new AssertionError("FOLLOW fail");
         if(!FOLLOW.get("C").contains("+"))
             throw new AssertionError("FOLLOW fail");
-        if(!FOLLOW.get("C").contains("EPSILON"))
+        if(!FOLLOW.get("C").contains("$"))
             throw new AssertionError("FOLLOW fail");
         if(!(FOLLOW.get("C").size() == 3))
             throw new AssertionError("FOLLOW fail");
@@ -182,7 +182,7 @@ public class Main {
             throw new AssertionError("FOLLOW fail");
         if(!FOLLOW.get("D").contains("+"))
             throw new AssertionError("FOLLOW fail");
-        if(!FOLLOW.get("D").contains("EPSILON"))
+        if(!FOLLOW.get("D").contains("$"))
             throw new AssertionError("FOLLOW fail");
         if(!(FOLLOW.get("D").size() == 4))
             throw new AssertionError("FOLLOW fail");
@@ -200,11 +200,11 @@ public class Main {
             throw new AssertionError("FIRST fail");
         if(!(FIRST.get("S").size() == 1))
             throw new AssertionError("FIRST fail");
-        if(!FOLLOW.get("A").contains("EPSILON"))
+        if(!FOLLOW.get("A").contains("$"))
             throw new AssertionError("FOLLOW fail");
         if(!(FOLLOW.get("A").size() == 1))
             throw new AssertionError("FOLLOW fail");
-        if(!FOLLOW.get("S").contains("EPSILON"))
+        if(!FOLLOW.get("S").contains("$"))
             throw new AssertionError("FOLLOW fail");
         if(!(FOLLOW.get("S").size() == 1))
             throw new AssertionError("FOLLOW fail");
@@ -251,6 +251,35 @@ public class Main {
                 case 7:
                     System.out.println(parser.getFirstSet());
                     System.out.println(parser.getFollowSet());
+                    break;
+                case 8:
+                    System.out.println(parser.getParseTable());
+                    printToFile("gs/table.txt", parser.getParseTable());
+                    break;
+                case 9:
+                    Scanner inScanner = new Scanner(System.in);
+                    var seq = Arrays.asList(inScanner.nextLine().replace("\n", "").split(" "));
+                    boolean result = parser.parse(seq);
+                    if (result) {
+                        System.out.println("Sequence " + seq + " accepted.");
+                        Stack<String> pi = parser.getPi();
+                        System.out.println(pi);
+                        StringBuilder sb = new StringBuilder();
+
+                        for (String productionIndexString : pi) {
+                            if (productionIndexString.equals("EPSILON")) {
+                                continue;
+                            }
+                            Integer productionIndex = Integer.parseInt(productionIndexString);
+                            parser.getProductionsNumbered().forEach((first, second) ->{
+                                if (productionIndex.equals(second))
+                                    sb.append(second).append(": ").append(first.getFirst()).append(" -> ").append(first.getSecond()).append("\n");
+                            });
+                        }
+                        System.out.println(sb);
+                    } else {
+                        System.out.println("Sequence " + seq + " is not accepted.");
+                    }
                     break;
             }
             printGrammarMenu();
