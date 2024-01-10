@@ -30,4 +30,8 @@ public class ProgramInternalForm {
 
         return computedString.toString();
     }
+
+    public List<Pair<String, Pair<Integer, Integer>>> getTokenPositionPair() {
+        return tokenPositionPair;
+    }
 }

@@ -40,7 +40,7 @@ public class Parser {
                     temp.add("EPSILON");
                 else if (terminals.contains(firstSymbol))
                     temp.add(firstSymbol);
-                else
+                else if (!firstSymbol.equals(nonTerminal))
                     temp.addAll(firstOf(firstSymbol));
             }
         return temp;
@@ -218,12 +218,11 @@ public class Parser {
         return result;
     }
 
-    public boolean parseSource(List<Pair<Integer, Integer>> pif) {
+    public boolean parseSource(ProgramInternalForm pif) {
         List<String> sequence = new LinkedList<>();
-        for (Pair<Integer, Integer> pifEntry : pif) {
-            sequence.add(String.valueOf(pifEntry.getFirst()));
+        for (Pair<String, Pair<Integer, Integer>> pifEntry : pif.getTokenPositionPair()) {
+            sequence.add(pifEntry.getFirst());
         }
-
         return this.parse(sequence);
     }
 

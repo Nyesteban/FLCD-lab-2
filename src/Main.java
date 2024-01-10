@@ -1,4 +1,5 @@
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.*;
@@ -110,6 +111,7 @@ public class Main {
         System.out.println("7. Get FIRST and FOLLOW sets");
         System.out.println("8. Create parse table");
         System.out.println("9. Parse sequence");
+        System.out.println("10. Parse file");
         System.out.println("0. Exit");
     }
 
@@ -279,6 +281,31 @@ public class Main {
                         System.out.println(sb);
                     } else {
                         System.out.println("Sequence " + seq + " is not accepted.");
+                    }
+                    break;
+                case 10:
+                    var prScanner = new ProgramScanner("programs/p1.txt");
+                    prScanner.scan();
+                    result = parser.parseSource(prScanner.getPif());
+                    if (result) {
+                        System.out.println("PIF accepted.");
+                        Stack<String> pi = parser.getPi();
+                        System.out.println(pi);
+                        StringBuilder sb = new StringBuilder();
+
+                        for (String productionIndexString : pi) {
+                            if (productionIndexString.equals("EPSILON")) {
+                                continue;
+                            }
+                            Integer productionIndex = Integer.parseInt(productionIndexString);
+                            parser.getProductionsNumbered().forEach((first, second) ->{
+                                if (productionIndex.equals(second))
+                                    sb.append(second).append(": ").append(first.getFirst()).append(" -> ").append(first.getSecond()).append("\n");
+                            });
+                        }
+                        System.out.println(sb);
+                    } else {
+                        System.out.println("PIF is not accepted.");
                     }
                     break;
             }
