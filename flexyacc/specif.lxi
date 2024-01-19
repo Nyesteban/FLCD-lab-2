@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "parser.tab.h"
 int currentLine = 1;
 %} 
 
@@ -13,13 +14,44 @@ STRING_CONST	[\"][0-9a-zA-Z.' ]*[\"]
 
 %% 
 
-"output"|"input"|"if"|"else"|"for"|"integer"|"string"|"return"|"array"		{printf("Reserved word: %s\n", yytext);}
-"+"|"-"|"*"|"/"|"<="|">="|"=="|"!"|"<"|">"|"="|"&&"|"||"|"%"		{printf("Operator: %s\n", yytext);}
-"{"|"}"|"("|")"|"["|"]"|";"|","|"\""		{printf("Separator: %s\n", yytext);}
+"integer"		{printf("Reserved word: %s\n", yytext); return INTEGER;}
+"string"	{printf("Reserved word: %s\n", yytext); return STRING;}
+"input"		{printf("Reserved word: %s\n", yytext); return INPUT;}
+"output"	{printf("Reserved word: %s\n", yytext); return OUTPUT;}
+"if"		{printf("Reserved word: %s\n", yytext); return IF;}
+"else"		{printf("Reserved word: %s\n", yytext); return ELSE;}
+"for"		{printf("Reserved word: %s\n", yytext); return FOR;}
+"array"		{printf("Reserved word: %s\n", yytext); return ARRAY;}
 
-{IDENTIFIER}		{printf("Identifier: %s\n", yytext);}
-{NUMBER_CONST}		{printf("Number: %s\n", yytext);}
-{STRING_CONST}		{printf("String: %s\n", yytext);}
+"+"		{printf("Operator %s\n", yytext); return plus;}
+"-"		{printf("Operator %s\n", yytext); return minus;}
+"*"		{printf("Operator %s\n", yytext); return mul;}
+"/"		{printf("Operator %s\n", yytext); return division;}
+"%"		{printf("Operator %s\n", yytext); return mod;}
+"<="		{printf("Operator %s\n", yytext); return lessOrEqual;}
+">="		{printf("Operator %s\n", yytext); return moreOrEqual;}
+"<"		{printf("Operator %s\n", yytext); return less;}
+">"		{printf("Operator %s\n", yytext); return more;}
+"=="		{printf("Operator %s\n", yytext); return equal;}
+"!"		{printf("Operator %s\n", yytext); return not;}
+"="		{printf("Operator %s\n", yytext); return eq;}
+"&&"		{printf("Operator %s\n", yytext); return and;}
+"||"		{printf("Operator %s\n", yytext); return or;}
+
+
+"{"		{printf("Separator %s\n", yytext); return leftCurlyBracket;}
+"}"		{printf("Separator %s\n", yytext); return rightCurlyBracket;}
+"("		{printf("Separator %s\n", yytext); return leftRoundBracket;}
+")"		{printf("Separator %s\n", yytext); return rightRoundBracket;}
+"["		{printf("Separator %s\n", yytext); return leftBracket;}
+"]"		{printf("Separator %s\n", yytext); return rightBracket;}
+";"		{printf("Separator %s\n", yytext); return semicolon;}
+","		{printf("Separator %s\n", yytext); return comma;}
+"\""		{printf("Separator %s\n", yytext); return quote;}
+
+{IDENTIFIER}		{printf("Identifier: %s\n", yytext); return IDENTIFIER;}
+{NUMBER_CONST}		{printf("Number: %s\n", yytext); return NUMBER_CONST;}
+{STRING_CONST}		{printf("String: %s\n", yytext); return STRING_CONST;}
 
 [0-9][a-zA-Z0-9_]*		{printf("Illegal identifier\n");}
 [+|-]0		{printf("Illegal numeric constant\n");}
@@ -31,14 +63,4 @@ STRING_CONST	[\"][0-9a-zA-Z.' ]*[\"]
 		 
 . printf("Lexical Error\n",yytext);
 %% 
-main( argc, argv ) 
-int argc; 
-char **argv; 
-{ 
-    ++argv, --argc; /* skip over program name */ 
-    if ( argc > 0 ) 
-    yyin = fopen( argv[0], "r" ); 
-    else 
-     yyin = stdin; 
-    yylex(); 
-} 
+int yywrap(){return(1);}

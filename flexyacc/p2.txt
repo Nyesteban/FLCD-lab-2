@@ -12,7 +12,7 @@ if (n <= 1)
 if (done == 0 && (n == 2 || n == 3))
 {
     prime = 1;
-    done = 1
+    done = 1;
 }
 if (done == 0 && (n % 2 == 0 || n % 3 == 0))
 {
